@@ -1,5 +1,6 @@
 ﻿using Backend.Application.DTOs;
 using Backend.Application.Features.Products.Commands.Create;
+using Backend.Application.Features.Products.Commands.Delete;
 using Backend.Application.Features.Products.Commands.Update;
 using Backend.Application.Features.Products.Queries.GetById;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +14,18 @@ namespace Backend.WebApi.Controllers
         private readonly CreateProductCommand _createProductCommand;
         private readonly GetProductByIdQuery _getProductByIdQuery;
         private readonly UpdateProductCommand _updateProductCommand;
+        private readonly DeleteProductCommand _deleteProductCommand;
 
-        public ProductsController(CreateProductCommand createProductUseCase, GetProductByIdQuery getProductByIdQuery, UpdateProductCommand updateProductCommand)
+        public ProductsController(
+            CreateProductCommand createProductUseCase, 
+            GetProductByIdQuery getProductByIdQuery, 
+            UpdateProductCommand updateProductCommand,
+            DeleteProductCommand deleteProductCommand)
         {
             _createProductCommand = createProductUseCase;
             _getProductByIdQuery = getProductByIdQuery;
             _updateProductCommand = updateProductCommand;
+            _deleteProductCommand = deleteProductCommand;
         }
 
         [HttpGet("{id}")]
@@ -53,6 +60,16 @@ namespace Backend.WebApi.Controllers
         public async Task<IActionResult> UpdateProduct(int id, [FromBody] CreateUpdateProductDto productDto)
         {
             await _updateProductCommand.ExecuteAsync(id, productDto);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            await _deleteProductCommand.ExecuteAsync(id);
 
             return NoContent();
         }

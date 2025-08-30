@@ -1,4 +1,5 @@
 using Backend.Application.Features.Products.Commands.Create;
+using Backend.Application.Features.Products.Commands.Delete;
 using Backend.Application.Features.Products.Commands.Update;
 using Backend.Application.Features.Products.Queries.GetById;
 using Backend.Application.Interfaces;
@@ -44,6 +45,8 @@ builder.Services.AddScoped<CreateProductCommand>();
 builder.Services.AddScoped<GetProductByIdQuery>();
 
 builder.Services.AddScoped<UpdateProductCommand>();
+
+builder.Services.AddScoped<DeleteProductCommand>();
 
 var app = builder.Build();
 
