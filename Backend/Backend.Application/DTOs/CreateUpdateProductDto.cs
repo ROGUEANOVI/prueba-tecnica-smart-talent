@@ -11,7 +11,7 @@ namespace Backend.Application.DTOs
         [StringLength(255, ErrorMessage = "La descripción no puede tener más de 255 caracteres.")]
         public string? Description { get; set; }
 
-        [Range(0.01, double.MaxValue, ErrorMessage = "El precio debe ser mayor que 0.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "El precio debe ser mayor a cero.")]
         public decimal Price { get; set; }
     }
 }

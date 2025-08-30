@@ -37,6 +37,13 @@ namespace Backend.WebApi.Middleware
                     problemDetails.Status = StatusCodes.Status400BadRequest;
                     problemDetails.Detail = badRequestException.Message;
                     break;
+
+                case NotFoundException notFoundException:
+                    problemDetails.Title = "Not Found";
+                    problemDetails.Status = StatusCodes.Status404NotFound;
+                    problemDetails.Detail = notFoundException.Message;
+                    break;
+
                 default:
                     problemDetails.Title = "An unexpected error occurred.";
                     problemDetails.Status = StatusCodes.Status500InternalServerError;

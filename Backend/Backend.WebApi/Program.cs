@@ -1,4 +1,5 @@
 using Backend.Application.Features.Products.Commands.Create;
+using Backend.Application.Features.Products.Commands.Update;
 using Backend.Application.Features.Products.Queries.GetById;
 using Backend.Application.Interfaces;
 using Backend.Application.Mappings;
@@ -41,6 +42,8 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<CreateProductCommand>();
 
 builder.Services.AddScoped<GetProductByIdQuery>();
+
+builder.Services.AddScoped<UpdateProductCommand>();
 
 var app = builder.Build();
 
