@@ -14,29 +14,17 @@ namespace Backend.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Product> AddAsync(Product product)
+        public async Task<(IEnumerable<Product> Products, int TotalRecords)> GetPagedAsync(int pageNumber, int pageSize)
         {
-            _context.Products.Add(product);
+            var totalRecords = await _context.Products.CountAsync();
 
-            await _context.SaveChangesAsync();
-            
-            return product;
-        }
+            var products = await _context.Products
+                .OrderBy(p => p.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
-        public async Task DeleteAsync(int id)
-        {
-            var product = await _context.Products.FindAsync(id);
-
-            if (product != null)
-            {
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task<IEnumerable<Product>> GetAllAsync()
-        {
-            return await _context.Products.ToListAsync();
+            return (products, totalRecords);
         }
 
         public async Task<Product?> GetByIdAsync(int id)
@@ -50,10 +38,30 @@ namespace Backend.Infrastructure.Repositories
                 .FirstOrDefaultAsync(p => p.Name.ToLower() == name.ToLower());
         }
 
+        public async Task<Product> AddAsync(Product product)
+        {
+            _context.Products.Add(product);
+
+            await _context.SaveChangesAsync();
+
+            return product;
+        }
+
         public async Task UpdateAsync(Product product)
         {
             _context.Entry(product).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+
+            if (product != null)
+            {
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

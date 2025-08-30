@@ -2,6 +2,7 @@
 using Backend.Application.Features.Products.Commands.Create;
 using Backend.Application.Features.Products.Commands.Delete;
 using Backend.Application.Features.Products.Commands.Update;
+using Backend.Application.Features.Products.Queries.GetAll;
 using Backend.Application.Features.Products.Queries.GetById;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,17 +16,29 @@ namespace Backend.WebApi.Controllers
         private readonly GetProductByIdQuery _getProductByIdQuery;
         private readonly UpdateProductCommand _updateProductCommand;
         private readonly DeleteProductCommand _deleteProductCommand;
+        private readonly GetAllProductsQuery _getAllProductsQuery;
 
         public ProductsController(
             CreateProductCommand createProductUseCase, 
             GetProductByIdQuery getProductByIdQuery, 
             UpdateProductCommand updateProductCommand,
-            DeleteProductCommand deleteProductCommand)
+            DeleteProductCommand deleteProductCommand,
+            GetAllProductsQuery getAllProductsQuery)
         {
             _createProductCommand = createProductUseCase;
             _getProductByIdQuery = getProductByIdQuery;
             _updateProductCommand = updateProductCommand;
             _deleteProductCommand = deleteProductCommand;
+            _getAllProductsQuery = getAllProductsQuery;
+        }
+
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResponseDto<ProductDto>))]
+        public async Task<IActionResult> GetAllProducts([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            var pagedResponse = await _getAllProductsQuery.ExecuteAsync(pageNumber, pageSize);
+            return Ok(pagedResponse);
         }
 
         [HttpGet("{id}")]
