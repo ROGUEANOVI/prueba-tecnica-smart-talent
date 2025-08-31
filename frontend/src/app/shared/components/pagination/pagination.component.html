@@ -1,0 +1,98 @@
+<nav
+  *ngIf="totalPages > 0"
+  class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+  aria-label="Pagination"
+>
+  <div class="flex-1 text-left">
+    <label for="pageSize" class="text-sm font-medium text-gray-700"
+      >Por página:</label
+    >
+    <select
+      id="pageSize"
+      name="pageSize"
+      class="w-fit ml-2 rounded-md border-gray-300 py-1.5 pl-3 pr-7 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
+      [ngModel]="pageSize"
+      (change)="onSizeChange($event)"
+    >
+      <option *ngFor="let size of pageSizeOptions" [value]="size">
+        {{ size }}
+      </option>
+    </select>
+  </div>
+
+  <div class="hidden flex-1 text-center sm:block">
+    <p class="text-sm text-gray-700">
+      Mostrando
+      <span class="font-medium">{{ startRecord }}</span>
+      a
+      <span class="font-medium">{{ endRecord }}</span>
+      de
+      <span class="font-medium">{{ totalRecords }}</span>
+      resultados
+    </p>
+  </div>
+
+  <div class="flex-1 text-right">
+    <ul class="isolate inline-flex -space-x-px rounded-md shadow-sm">
+      <li (click)="goToPage(currentPage - 1)">
+        <a
+          class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+          [ngClass]="{
+            'cursor-pointer': currentPage > 1,
+            'cursor-not-allowed opacity-50': currentPage === 1
+          }"
+        >
+          <span class="sr-only">Anterior</span>
+          <svg
+            class="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M12.79 5.23a.75.75 0 010 1.06L9.06 10l3.73 3.71a.75.75 0 11-1.06 1.06l-4.25-4.25a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </a>
+      </li>
+      <li *ngFor="let page of pages" (click)="goToPage(page)">
+        <a
+          class="relative hidden items-center px-4 py-2 text-sm font-semibold cursor-pointer md:inline-flex"
+          [ngClass]="{
+            'z-10 bg-primary-600 text-white focus-visible:outline-primary-600':
+              page === currentPage,
+            'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50':
+              page !== currentPage
+          }"
+        >
+          {{ page }}
+        </a>
+      </li>
+      <li (click)="goToPage(currentPage + 1)">
+        <a
+          class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+          [ngClass]="{
+            'cursor-pointer': currentPage < totalPages,
+            'cursor-not-allowed opacity-50': currentPage === totalPages
+          }"
+        >
+          <span class="sr-only">Siguiente</span>
+          <svg
+            class="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M7.21 14.77a.75.75 0 010-1.06L10.94 10 7.21 6.29a.75.75 0 111.06-1.06l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
