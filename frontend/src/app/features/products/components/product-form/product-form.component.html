@@ -1,0 +1,96 @@
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="space-y-6">
+  <div>
+    <label for="name" class="block text-sm font-medium text-gray-700"
+      >Nombre del Producto</label
+    >
+    <div class="mt-1">
+      <input
+        type="text"
+        id="name"
+        formControlName="name"
+        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
+      />
+    </div>
+    <div
+      *ngIf="name?.invalid && (name?.dirty || name?.touched)"
+      class="mt-1 text-sm text-danger-600"
+    >
+      <span *ngIf="name?.errors?.['required']">El nombre es obligatorio.</span>
+      <span *ngIf="name?.errors?.['maxlength']"
+        >El nombre no puede tener más de 100 caracteres.</span
+      >
+    </div>
+  </div>
+
+  <div>
+    <label for="description" class="block text-sm font-medium text-gray-700"
+      >Descripción (Opcional)</label
+    >
+    <div class="mt-1">
+      <textarea
+        id="description"
+        formControlName="description"
+        rows="3"
+        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
+      ></textarea>
+    </div>
+    <div
+      *ngIf="
+        description?.invalid && (description?.dirty || description?.touched)
+      "
+      class="mt-1 text-sm text-danger-600"
+    >
+      <span *ngIf="description?.errors?.['maxlength']"
+        >La descripción no puede tener más de 255 caracteres.</span
+      >
+    </div>
+  </div>
+
+  <div>
+    <label for="price" class="block text-sm font-medium text-gray-700"
+      >Precio</label
+    >
+    <div class="mt-1">
+      <div class="relative mt-2 rounded-md shadow-sm">
+        <div
+          class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+        >
+          <span class="text-gray-500 sm:text-sm">$</span>
+        </div>
+        <input
+          type="number"
+          id="price"
+          formControlName="price"
+          placeholder="0.00"
+          class="block w-full rounded-md border-0 py-1.5 pl-7 pr-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
+        />
+      </div>
+    </div>
+    <div
+      *ngIf="price?.invalid && (price?.dirty || price?.touched)"
+      class="mt-1 text-sm text-danger-600"
+    >
+      <span *ngIf="price?.errors?.['required']">El precio es obligatorio.</span>
+      <span *ngIf="price?.errors?.['min']"
+        >El precio debe ser mayor que 0.</span
+      >
+    </div>
+  </div>
+
+  <div class="flex justify-end gap-4">
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+    >
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      [disabled]="productForm.invalid"
+      class="rounded-md border border-transparent bg-primary-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      Guardar Producto
+    </button>
+  </div>
+</form>

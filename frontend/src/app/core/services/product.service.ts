@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { PagedResponse } from '../models/paged-response.model';
-import { Product } from '../models/product.model';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { CreateUpdateProduct, Product } from '../models/product.model';
+import { BehaviorSubject, catchError, EMPTY, Observable, tap } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
@@ -46,5 +46,20 @@ export class ProductService {
         })
       )
       .subscribe();
+  }
+
+  public createProduct(product: CreateUpdateProduct): Observable<Product> {
+    this.state.next({ ...this.state.value, loading: true });
+
+    return this.http.post<Product>(this.apiUrl, product).pipe(
+      tap(() => {
+        this.getProducts(1, this.state.value.pagedResponse.pageSize);
+      }),
+      catchError((err) => {
+        console.error(err);
+        this.state.next({ ...this.state.value, loading: false });
+        return EMPTY;
+      })
+    );
   }
 }
