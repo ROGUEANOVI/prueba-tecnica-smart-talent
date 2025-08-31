@@ -86,4 +86,20 @@ export class ProductService {
       })
     );
   }
+
+  public deleteProduct(id: number): Observable<void> {
+    this.state.next({ ...this.state.value, loading: true });
+
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+      tap(() => {
+        const { pageNumber, pageSize } = this.state.value.pagedResponse;
+        this.getProducts(pageNumber, pageSize);
+      }),
+      catchError((err) => {
+        console.error(err);
+        this.state.next({ ...this.state.value, loading: false });
+        return EMPTY;
+      })
+    );
+  }
 }

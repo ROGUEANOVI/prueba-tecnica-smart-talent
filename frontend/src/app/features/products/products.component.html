@@ -35,6 +35,7 @@
     <app-product-list
       [products]="state.pagedResponse.data"
       (edit)="openEditModal($event)"
+      (delete)="openDeleteModal($event)"
     ></app-product-list>
 
     <app-pagination
@@ -60,3 +61,15 @@
     (cancel)="closeModal()"
   ></app-product-form>
 </app-modal>
+
+<app-confirm-dialog
+  [isOpen]="isDeleteModalOpen"
+  title="Eliminar Producto"
+  [message]="
+    '¿Estás seguro de que deseas eliminar el producto ' +
+    (productToDelete?.name || '') +
+    '? Esta acción no se puede deshacer.'
+  "
+  (confirm)="onConfirmDelete()"
+  (cancel)="closeDeleteModal()"
+></app-confirm-dialog>

@@ -87,7 +87,10 @@
                 </div>
 
                 <div class="relative">
-                  <button class="group text-gray-400 hover:text-danger-600">
+                  <button
+                    (click)="delete.emit(product)"
+                    class="group text-gray-400 hover:text-danger-600"
+                  >
                     <span class="sr-only">Eliminar</span>
                     <svg
                       class="h-5 w-5"

@@ -21,6 +21,10 @@ export class ProductsComponent implements OnInit {
 
   public selectedProduct: Product | null = null;
 
+  public isDeleteModalOpen = false;
+
+  public productToDelete: Product | null = null;
+
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
@@ -46,6 +50,11 @@ export class ProductsComponent implements OnInit {
     this.isModalOpen = true;
   }
 
+  openDeleteModal(product: Product): void {
+    this.productToDelete = product;
+    this.isDeleteModalOpen = true;
+  }
+
   closeModal(): void {
     this.isModalOpen = false;
     this.selectedProduct = null;
@@ -62,5 +71,20 @@ export class ProductsComponent implements OnInit {
     operation.subscribe(() => {
       this.closeModal();
     });
+  }
+
+  closeDeleteModal(): void {
+    this.isDeleteModalOpen = false;
+    this.productToDelete = null;
+  }
+
+  onConfirmDelete(): void {
+    if (this.productToDelete) {
+      this.productService
+        .deleteProduct(this.productToDelete.id)
+        .subscribe(() => {
+          this.closeDeleteModal();
+        });
+    }
   }
 }
