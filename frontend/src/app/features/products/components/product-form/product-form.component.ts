@@ -12,6 +12,7 @@ import {
   CreateUpdateProduct,
   Product,
 } from 'src/app/core/models/product.model';
+import { noWhitespaceValidator } from 'src/app/core/validators/no-whitespaces.validator';
 
 @Component({
   selector: 'app-product-form',
@@ -30,7 +31,10 @@ export class ProductFormComponent implements OnInit, OnChanges {
 
   constructor(private fb: FormBuilder) {
     this.productForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(100)]],
+      name: [
+        '',
+        [Validators.required, Validators.maxLength(100), noWhitespaceValidator],
+      ],
       description: ['', [Validators.maxLength(255)]],
       price: [null, [Validators.required, Validators.min(0.01)]],
     });
@@ -52,7 +56,10 @@ export class ProductFormComponent implements OnInit, OnChanges {
       this.productForm.markAllAsTouched();
       return;
     }
-    this.save.emit(this.productForm.value);
+    let { name, description, price } = this.productForm.value;
+    name = name.trim();
+    description = description?.trim() === '' ? null : description?.trim();
+    this.save.emit({ name, description, price });
   }
 
   onCancel(): void {
