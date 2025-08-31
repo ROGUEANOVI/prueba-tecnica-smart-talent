@@ -1,0 +1,36 @@
+<div class="px-4 sm:px-6 lg:px-8 py-8" *ngIf="state$ | async as state">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-xl font-semibold text-gray-900">Gestión de Productos</h1>
+      <p class="mt-2 text-sm text-gray-700">
+        Una lista de todos los productos en el sistema.
+      </p>
+    </div>
+    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+      <button
+        type="button"
+        class="inline-flex items-center justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:w-auto"
+      >
+        Añadir Producto
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="state.loading" class="mt-8 text-center">
+    <p class="text-gray-500">Cargando productos...</p>
+  </div>
+
+  <div *ngIf="!state.loading" class="mt-8 flex flex-col">
+    <app-product-list [products]="state.pagedResponse.data"></app-product-list>
+
+    <app-pagination
+      [currentPage]="state.pagedResponse.pageNumber"
+      [totalPages]="state.pagedResponse.totalPages"
+      [pageSize]="state.pagedResponse.pageSize"
+      [totalRecords]="state.pagedResponse.totalRecords"
+      (pageChange)="onPageChange($event)"
+      (pageSizeChange)="onPageSizeChange($event)"
+    >
+    </app-pagination>
+  </div>
+</div>
