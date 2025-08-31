@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductService } from 'src/app/core/services/product.service';
-import { CreateUpdateProduct } from 'src/app/core/models/product.model';
+import {
+  CreateUpdateProduct,
+  Product,
+} from 'src/app/core/models/product.model';
 import { ProductFormComponent } from './components/product-form/product-form.component';
 
 @Component({
@@ -12,9 +15,11 @@ export class ProductsComponent implements OnInit {
 
   @ViewChild(ProductFormComponent) productForm!: ProductFormComponent;
 
-  public isCreateModalOpen = false;
-
   private currentPageSize = 10;
+
+  public isModalOpen = false;
+
+  public selectedProduct: Product | null = null;
 
   constructor(private productService: ProductService) {}
 
@@ -32,17 +37,30 @@ export class ProductsComponent implements OnInit {
   }
 
   openCreateModal(): void {
-    this.isCreateModalOpen = true;
+    this.selectedProduct = null;
+    this.isModalOpen = true;
   }
 
-  closeCreateModal(): void {
-    this.isCreateModalOpen = false;
-    this.productForm?.resetForm();
+  openEditModal(product: Product): void {
+    this.selectedProduct = product;
+    this.isModalOpen = true;
   }
 
-  onSaveProduct(product: CreateUpdateProduct): void {
-    this.productService.createProduct(product).subscribe(() => {
-      this.closeCreateModal();
+  closeModal(): void {
+    this.isModalOpen = false;
+    this.selectedProduct = null;
+    if (this.productForm) {
+      this.productForm?.resetForm();
+    }
+  }
+
+  onSaveProduct(productData: CreateUpdateProduct): void {
+    const operation = this.selectedProduct
+      ? this.productService.updateProduct(this.selectedProduct.id, productData)
+      : this.productService.createProduct(productData);
+
+    operation.subscribe(() => {
+      this.closeModal();
     });
   }
 }

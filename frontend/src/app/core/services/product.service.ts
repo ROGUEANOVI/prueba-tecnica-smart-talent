@@ -48,12 +48,36 @@ export class ProductService {
       .subscribe();
   }
 
-  public createProduct(product: CreateUpdateProduct): Observable<Product> {
+  public createProduct(product: CreateUpdateProduct): Observable<void> {
     this.state.next({ ...this.state.value, loading: true });
 
-    return this.http.post<Product>(this.apiUrl, product).pipe(
+    return this.http.post<void>(this.apiUrl, product).pipe(
       tap(() => {
         this.getProducts(1, this.state.value.pagedResponse.pageSize);
+      }),
+      catchError((err) => {
+        console.error(err);
+        this.state.next({ ...this.state.value, loading: false });
+        return EMPTY;
+      })
+    );
+  }
+
+  public getProductById(id: number): Observable<Product> {
+    return this.http.get<Product>(`${this.apiUrl}/${id}`);
+  }
+
+  public updateProduct(
+    id: number,
+    product: CreateUpdateProduct
+  ): Observable<void> {
+    this.state.next({ ...this.state.value, loading: true });
+
+    return this.http.put<void>(`${this.apiUrl}/${id}`, product).pipe(
+      tap(() => {
+        const currentPage = this.state.value.pagedResponse.pageNumber;
+        const pageSize = this.state.value.pagedResponse.pageSize;
+        this.getProducts(currentPage, pageSize);
       }),
       catchError((err) => {
         console.error(err);

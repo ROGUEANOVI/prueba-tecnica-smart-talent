@@ -77,20 +77,48 @@
     </div>
   </div>
 
-  <div class="flex justify-end gap-4">
-    <button
-      type="button"
-      (click)="onCancel()"
-      class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-    >
-      Cancelar
-    </button>
-    <button
-      type="submit"
-      [disabled]="productForm.invalid"
-      class="rounded-md border border-transparent bg-primary-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
-    >
-      Guardar Producto
-    </button>
+  <div class="pt-5">
+    <div class="flex justify-end gap-x-3">
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="inline-flex items-center gap-x-2 rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+      >
+        <svg
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        [disabled]="productForm.invalid"
+        class="inline-flex items-center gap-x-2 justify-center rounded-md bg-primary-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 ..."
+      >
+        <svg
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M4.5 12.75l6 6 9-13.5"
+          />
+        </svg>
+        Guardar
+      </button>
+    </div>
   </div>
 </form>

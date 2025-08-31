@@ -1,17 +1,32 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CreateUpdateProduct } from 'src/app/core/models/product.model';
+import {
+  CreateUpdateProduct,
+  Product,
+} from 'src/app/core/models/product.model';
 
 @Component({
   selector: 'app-product-form',
   templateUrl: './product-form.component.html',
 })
-export class ProductFormComponent implements OnInit {
+export class ProductFormComponent implements OnInit, OnChanges {
   productForm: FormGroup;
+
+  @Input() productToEdit: Product | null = null;
 
   @Output() save = new EventEmitter<CreateUpdateProduct>();
 
   @Output() cancel = new EventEmitter<void>();
+
+  public formTitle = 'Crear Nuevo Producto';
 
   constructor(private fb: FormBuilder) {
     this.productForm = this.fb.group({
@@ -22,6 +37,15 @@ export class ProductFormComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['productToEdit'] && this.productToEdit) {
+      this.formTitle = 'Editar Producto';
+      this.productForm.patchValue(this.productToEdit);
+    } else {
+      this.formTitle = 'Crear Nuevo Producto';
+    }
+  }
 
   onSubmit(): void {
     if (this.productForm.invalid) {
@@ -37,6 +61,7 @@ export class ProductFormComponent implements OnInit {
 
   public resetForm(): void {
     this.productForm.reset();
+    this.formTitle = 'Crear Nuevo Producto';
   }
 
   get name() {
