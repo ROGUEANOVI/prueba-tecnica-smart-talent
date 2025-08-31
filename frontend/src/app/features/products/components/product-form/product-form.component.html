@@ -1,0 +1,126 @@
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="space-y-6">
+  <div>
+    <label for="name" class="block text-sm font-medium text-gray-700"
+      >Nombre del Producto</label
+    >
+    <div class="mt-1">
+      <input
+        type="text"
+        id="name"
+        formControlName="name"
+        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
+      />
+    </div>
+    <div
+      *ngIf="name?.invalid && (name?.dirty || name?.touched)"
+      class="mt-2 text-sm text-danger-600"
+    >
+      <span *ngIf="name?.errors?.['required'] || name?.errors?.['whitespace']"
+        >El nombre es obligatorio.</span
+      >
+      <span *ngIf="name?.errors?.['maxlength']"
+        >El nombre no puede tener más de 100 caracteres.</span
+      >
+    </div>
+  </div>
+
+  <div>
+    <label for="description" class="block text-sm font-medium text-gray-700"
+      >Descripción (Opcional)</label
+    >
+    <div class="mt-1">
+      <textarea
+        id="description"
+        formControlName="description"
+        rows="3"
+        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
+      ></textarea>
+    </div>
+    <div
+      *ngIf="
+        description?.invalid && (description?.dirty || description?.touched)
+      "
+      class="mt-1 text-sm text-danger-600"
+    >
+      <span *ngIf="description?.errors?.['maxlength']"
+        >La descripción no puede tener más de 255 caracteres.</span
+      >
+    </div>
+  </div>
+
+  <div>
+    <label for="price" class="block text-sm font-medium text-gray-700"
+      >Precio</label
+    >
+    <div class="mt-1">
+      <div class="relative mt-2 rounded-md shadow-sm">
+        <div
+          class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+        >
+          <span class="text-gray-500 sm:text-sm">$</span>
+        </div>
+        <input
+          type="number"
+          id="price"
+          formControlName="price"
+          placeholder="0.00"
+          class="block w-full rounded-md border-0 py-1.5 pl-7 pr-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
+        />
+      </div>
+    </div>
+    <div
+      *ngIf="price?.invalid && (price?.dirty || price?.touched)"
+      class="mt-1 text-sm text-danger-600"
+    >
+      <span *ngIf="price?.errors?.['required']">El precio es obligatorio.</span>
+      <span *ngIf="price?.errors?.['min']"
+        >El precio debe ser mayor que 0.</span
+      >
+    </div>
+  </div>
+
+  <div class="pt-5">
+    <div class="flex justify-end gap-x-3">
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="inline-flex items-center gap-x-2 rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+      >
+        <svg
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        [disabled]="productForm.invalid"
+        class="inline-flex items-center gap-x-2 justify-center rounded-md bg-primary-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 disabled:bg-primary-300 disabled:cursor-not-allowed"
+      >
+        <svg
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M4.5 12.75l6 6 9-13.5"
+          />
+        </svg>
+        Guardar
+      </button>
+    </div>
+  </div>
+</form>

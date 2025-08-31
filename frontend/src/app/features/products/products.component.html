@@ -1,0 +1,95 @@
+<div class="px-4 sm:px-6 lg:px-8 py-8" *ngIf="state$ | async as state">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-xl font-semibold text-gray-900">Gestión de Productos</h1>
+      <p class="mt-2 text-sm text-gray-700">
+        Una lista de todos los productos en el sistema.
+      </p>
+    </div>
+    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+      <button
+        (click)="openCreateModal()"
+        type="button"
+        class="inline-flex items-center gap-x-2 rounded-md bg-primary-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 ..."
+      >
+        <svg
+          class="-ml-0.5 h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"
+          />
+        </svg>
+        Añadir Producto
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="state.loading" class="mt-8 flex justify-center items-center">
+    <svg
+      class="animate-spin -ml-1 mr-3 h-10 w-10 text-primary-600"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        class="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        stroke-width="4"
+      ></circle>
+      <path
+        class="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      ></path>
+    </svg>
+    <span class="text-gray-500">Cargando...</span>
+  </div>
+
+  <div *ngIf="!state.loading" class="mt-8 flex flex-col">
+    <app-product-list
+      [products]="state.pagedResponse.data"
+      (edit)="openEditModal($event)"
+      (delete)="openDeleteModal($event)"
+    ></app-product-list>
+
+    <app-pagination
+      [currentPage]="state.pagedResponse.pageNumber"
+      [totalPages]="state.pagedResponse.totalPages"
+      [pageSize]="state.pagedResponse.pageSize"
+      [totalRecords]="state.pagedResponse.totalRecords"
+      (pageChange)="onPageChange($event)"
+      (pageSizeChange)="onPageSizeChange($event)"
+    >
+    </app-pagination>
+  </div>
+</div>
+
+<app-modal
+  [isOpen]="isModalOpen"
+  (close)="closeModal()"
+  [title]="selectedProduct ? 'Editar Producto' : 'Crear Nuevo Producto'"
+>
+  <app-product-form
+    [productToEdit]="selectedProduct"
+    (save)="onSaveProduct($event)"
+    (cancel)="closeModal()"
+  ></app-product-form>
+</app-modal>
+
+<app-confirm-dialog
+  [isOpen]="isDeleteModalOpen"
+  title="Eliminar Producto"
+  [message]="
+    '¿Estás seguro de que deseas eliminar el producto ' +
+    (productToDelete?.name || '') +
+    '? Esta acción no se puede deshacer.'
+  "
+  (confirm)="onConfirmDelete()"
+  (cancel)="closeDeleteModal()"
+></app-confirm-dialog>
